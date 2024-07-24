@@ -2,16 +2,22 @@ import { Box, Button, Typography } from "@mui/material";
 import { ITaskDetails } from "../../type";
 import TaskEdit from "../../pages/task/task_edit";
 import TaskView from "../../pages/task/task_view";
+import { removeTask } from "../../api/task";
 
 interface Props {
   itemDetails: ITaskDetails;
+  getAllTasks: () => Promise<void>
 }
-const ItemBox: React.FC<Props> = ({ itemDetails }) => {
+const ItemBox: React.FC<Props> = ({ itemDetails, getAllTasks }) => {
+  const handleDelete = async (Id: string) => {
+    await removeTask(Id)
+    await getAllTasks()
+  }
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
-    taskId: number
+    taskId: string
   ) => {
-    e.dataTransfer.setData("text", taskId.toString());
+    e.dataTransfer.setData("text", taskId);
   };
   const handleDragEnd = (
     e: React.DragEvent<HTMLDivElement>,
@@ -20,18 +26,18 @@ const ItemBox: React.FC<Props> = ({ itemDetails }) => {
   };
   return (
     <Box
-      key={itemDetails.number}
+      key={itemDetails._id}
       draggable
-      onDragStart={(e) => handleDragStart(e, itemDetails.number)}
+      onDragStart={(e) => handleDragStart(e, itemDetails._id)}
       onDragEnd={handleDragEnd}
       sx={{ background: "#bfe9f5", padding: "1rem", marginTop: "5px" }}
     >
       <Typography sx={{ fontWeight: "bold" }}>
-        Task {itemDetails.number}
+        {itemDetails.title}
       </Typography>
       <Typography>{itemDetails.description}</Typography>
       <Typography sx={{ marginTop: "1rem" }} variant={"body2"}>
-        {itemDetails.date}
+        {itemDetails.created_at}
       </Typography>
       <Box
         sx={{
@@ -45,10 +51,11 @@ const ItemBox: React.FC<Props> = ({ itemDetails }) => {
           variant="contained"
           sx={{ backgroundColor: "red", fontSize: "10px" }}
           size="small"
+          onClick={() => handleDelete(itemDetails._id)}
         >
           Delete
         </Button>
-        <TaskEdit />
+        <TaskEdit itemDetails={itemDetails} getAllTasks={getAllTasks}/>
         <TaskView />
       </Box>
     </Box>

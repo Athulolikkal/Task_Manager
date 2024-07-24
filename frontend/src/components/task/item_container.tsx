@@ -6,9 +6,10 @@ import React from "react";
 interface Props {
   title: string;
   tasks: ITaskDetails[];
+  getAllTasks: () => Promise<void>
 }
 
-const ItemContainer: React.FC<Props> = ({ title, tasks }) => {
+const ItemContainer: React.FC<Props> = ({ title, tasks, getAllTasks }) => {
   return (
     <>
       <Card sx={{ padding: "1rem", margin: "1rem", width: "100%" }}>
@@ -27,7 +28,7 @@ const ItemContainer: React.FC<Props> = ({ title, tasks }) => {
 
         {tasks.map((item: ITaskDetails) => {
           if (item.status === title) {
-            return <ItemBox itemDetails={item} />;
+            return <ItemBox itemDetails={item} getAllTasks={getAllTasks}/>;
           }
         })}
       </Card>

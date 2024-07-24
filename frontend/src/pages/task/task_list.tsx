@@ -1,13 +1,31 @@
 import { Box, } from "@mui/material";
 import ItemContainer from "../../components/task/item_container";
-import { ITaskDetails } from "../../type";
-import { useState } from "react";
+import { ITaskDetails, ITaskResponse } from "../../type";
+import { useEffect, useState } from "react";
 import { allTasks } from "../../data/taskDataTesting";
 import SearchBAr from "../../components/searchBar/search_bar";
 import TaskCreate from "./task_create";
+import { getAllActiveTask } from "../../api/task";
 
 const TaskList = () => {
   const [tasks, setTasks] = useState<ITaskDetails[]>(allTasks);
+  // const [loading, setLoading] = useState<boolean>(false)
+  const [searchValue, setSearchValue] = useState('')
+  const [sortValue, setSortValue] = useState<number>(-1)
+
+  useEffect(() => {
+    getAllTasks()
+  }, [sortValue, searchValue])
+
+  const getAllTasks = async () => {
+    const { status, tasks }: ITaskResponse = await getAllActiveTask({ searchValue, sortValue });
+    if (status) {
+      setTasks(tasks);
+    } else {
+      setTasks([]);
+    }
+  };
+
 
   const statusItems = ["TODO", "IN PROGRESS", "DONE"]
   // when droping an item, changing the status of that item
@@ -16,7 +34,7 @@ const TaskList = () => {
     const taskId = e.dataTransfer.getData("text");
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.number === parseInt(taskId) ? { ...task, status } : task
+        task._id === taskId ? { ...task, status } : task
       )
     );
   };
@@ -30,9 +48,9 @@ const TaskList = () => {
     <>
       <Box>
         {/* Creating Task */}
-        <TaskCreate />
+        <TaskCreate getAllTasks={getAllTasks} />
         {/* search bar */}
-        <SearchBAr />
+        <SearchBAr setSearchValue={setSearchValue} setSortValue={setSortValue} />
         {/* each coloumns */}
         <Box sx={{ display: "flex", justifyContent: "space-around" }}>
           {statusItems.map((item: string) => (
@@ -41,7 +59,7 @@ const TaskList = () => {
               onDragOver={handleDragOver}
               onDrop={(e) => handleDrop(e, item)}
             >
-              <ItemContainer title={item} tasks={tasks} />
+              <ItemContainer title={item} tasks={tasks} getAllTasks={getAllTasks}/>
             </div>
           ))}
         </Box>
