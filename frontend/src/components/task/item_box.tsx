@@ -1,5 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ITaskDetails } from "../../type";
+import TaskEdit from "../../pages/task/task_edit";
+import TaskView from "../../pages/task/task_view";
 
 interface Props {
   itemDetails: ITaskDetails;
@@ -46,12 +48,8 @@ const ItemBox: React.FC<Props> = ({ itemDetails }) => {
         >
           Delete
         </Button>
-        <Button variant="contained" size="small" sx={{ fontSize: "10px" }}>
-          Edit
-        </Button>
-        <Button variant="contained" size="small" sx={{ fontSize: "10px" }}>
-          View Details
-        </Button>
+        <TaskEdit />
+        <TaskView />
       </Box>
     </Box>
   );
