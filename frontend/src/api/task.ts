@@ -63,10 +63,30 @@ export const updateTask = async (taskDetails: ITaskDetails) => {
       description,
     });
     console.log(response, "response");
-    if (response?.data?.error) {
+    if (response.data?.error) {
       return { status: false };
     } else {
       return { status: true };
+    }
+  } catch (err) {
+    console.log(err, "error is this");
+    return { status: false };
+  }
+};
+
+export const changeTaskStatus = async (updateDetails: any) => {
+  try {
+    const { taskId, status } = updateDetails;
+    if (taskId && status) {
+      const response = await Axios.patch("/task/updatestatus", {
+        taskId,
+        status,
+      });
+      if (response?.data?.error) {
+        return { status: false };
+      } else {
+        return { status: true };
+      }
     }
   } catch (err) {
     console.log(err, "error is this");

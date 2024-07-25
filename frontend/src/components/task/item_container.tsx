@@ -12,7 +12,7 @@ interface Props {
 const ItemContainer: React.FC<Props> = ({ title, tasks, getAllTasks }) => {
   return (
     <>
-      <Card sx={{ padding: "1rem", margin: "1rem", width: "100%" }}>
+      <Card sx={{ padding: "1rem", margin: "1rem", width:{md:'300px',xs:'100%'},}}>
         <Box
           sx={{
             backgroundColor: "#4f9af0",
