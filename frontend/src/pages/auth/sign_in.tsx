@@ -6,13 +6,20 @@ import {
   InputBase,
   Typography,
   FormHelperText,
+  Link,
 } from "@mui/material";
 import { inputTagStyle } from "./style";
 import { IFormLoginInput } from "../../type";
 import { userSignin } from "../../api/user";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { userLoggedIn } from "../../redux/user_slice";
+import { Link as RouterLink } from "react-router-dom";
+import { useState } from "react";
 
 const SignIn = () => {
+  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
   const navigate = useNavigate();
   const {
     register,
@@ -20,9 +27,12 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<IFormLoginInput>();
   const onSubmit: SubmitHandler<IFormLoginInput> = async (data) => {
-    console.log(data);
+    setLoading(true)
     const userLoginResponse = await userSignin(data);
+    setLoading(false)
     if (userLoginResponse.status) {
+      dispatch(userLoggedIn(userLoginResponse.userId))
+      localStorage.setItem("userIdTM", userLoginResponse.userId);
       navigate("/");
     } else {
       window.alert(userLoginResponse.message);
@@ -94,10 +104,22 @@ const SignIn = () => {
               )}
             </FormControl>
 
-            <Button type="submit" variant="contained" fullWidth>
-              Signup
+            <Button type="submit" variant="contained" disabled={loading} fullWidth>
+              {loading ? "loading..." : "Signin"}
             </Button>
           </form>
+          <Box sx={{ paddingTop: "1rem" }}>
+            <Typography sx={{ textAlign: "center" }}>
+              Don't have an account?{" "}
+              <Link
+                component={RouterLink}
+                to="/signup"
+                sx={{ textDecoration: "none" }}
+              >
+                Signup
+              </Link>
+            </Typography>
+          </Box>
         </Box>
       </Box>
     </Box>

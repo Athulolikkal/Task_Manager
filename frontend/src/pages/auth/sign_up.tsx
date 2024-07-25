@@ -15,8 +15,10 @@ import { inputTagStyle } from "./style";
 import { IFormInput } from "../../type";
 import { userSignup } from "../../api/user";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const SignUp = () => {
+  const [loading, setLoading] = useState(false)
   const {
     register,
     handleSubmit,
@@ -25,7 +27,9 @@ const SignUp = () => {
   } = useForm<IFormInput>();
   const navigate = useNavigate();
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    setLoading(true)
     const userAdd = await userSignup(data);
+    setLoading(false)
     if (userAdd.status) {
       navigate("/");
     } else {
@@ -43,7 +47,7 @@ const SignUp = () => {
         padding: "2rem",
       }}
     >
-      <Box sx={{ marginTop: "2rem" }}>
+      <Box >
         <Box>
           <Typography
             variant="h5"
@@ -150,8 +154,8 @@ const SignUp = () => {
               )}
             </FormControl>
 
-            <Button type="submit" variant="contained" fullWidth>
-              Signup
+            <Button type="submit" variant="contained" disabled={loading} fullWidth>
+              {loading ? "loading..." : "Signup"}
             </Button>
           </form>
           <Box sx={{ paddingTop: "1rem" }}>

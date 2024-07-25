@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, } from "@mui/material";
 import ItemContainer from "../../components/task/item_container";
 import { ITaskDetails, ITaskResponse } from "../../type";
 import { useEffect, useState } from "react";
@@ -6,11 +6,14 @@ import SearchBAr from "../../components/searchBar/search_bar";
 import TaskCreate from "./task_create";
 import { changeTaskStatus, getAllActiveTask } from "../../api/task";
 
+
+
 const TaskList = () => {
   const [tasks, setTasks] = useState<ITaskDetails[]>([]);
   // const [loading, setLoading] = useState<boolean>(false)
   const [searchValue, setSearchValue] = useState("");
   const [sortValue, setSortValue] = useState<number>(-1);
+
 
   useEffect(() => {
     getAllTasks();
@@ -50,7 +53,7 @@ const TaskList = () => {
 
   return (
     <>
-      <Box>
+      <Box sx={{marginTop:'1rem'}}>
         {/* Creating Task */}
         <TaskCreate getAllTasks={getAllTasks} />
         {/* search bar */}

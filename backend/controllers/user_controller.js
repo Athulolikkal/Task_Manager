@@ -26,7 +26,7 @@ const userController = {
         //checking email already exist?
         const existingUser = await findExistingUser(email);
         if (existingUser) {
-          return res.status(400).json({ message: "User already exists." });
+          return res.status(200).json({ message: "User already exists.", error: true });
         } else {
           //hashing password
           const saltRounds = 10;

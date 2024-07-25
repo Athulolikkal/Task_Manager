@@ -24,8 +24,8 @@ export const userSignin = async (data: IFormLoginInput) => {
     if (loginUser.data.error) {
       return { status: false, message: loginUser.data.message };
     } else {
-      localStorage.setItem("userIdTM", loginUser.data.userId);
-      return { status: true, message: loginUser.data.message };
+      // localStorage.setItem("userIdTM", loginUser.data.userId);
+      return { status: true, message: loginUser.data.message,userId:loginUser.data.userId };
     }
   } catch (err) {
     console.log(err, "error is thisd");
