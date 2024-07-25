@@ -24,7 +24,6 @@ const taskSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users',
         required: true,
-        default: '66a10d52dccda4d28a9b5dfd'
     },
     active: {
         type: Boolean,

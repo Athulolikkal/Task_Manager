@@ -5,6 +5,7 @@ import { ITaskDetails, ITaskResponse } from "../type";
 interface IAddTask {
   title: string;
   description: string;
+  userId: string;
 }
 interface IFindTask {
   searchValue?: string;
@@ -25,8 +26,9 @@ export const getAllActiveTask = async (
 ): Promise<ITaskResponse> => {
   try {
     const { searchValue, sortValue } = data;
+    const userId = localStorage.getItem("userIdTM");
     const response: any = await Axios.get(
-      `/task/allactivetasks?sortValue=${sortValue}&item=${searchValue}`
+      `/task/allactivetasks?sortValue=${sortValue}&item=${searchValue}&user=${userId}`
     );
     if (response?.data?.error) {
       return { status: false, tasks: [] };

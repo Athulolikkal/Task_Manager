@@ -2,11 +2,12 @@ import taskSchema from "../models/task.js";
 const taskController = {
   addTask: async (req, res) => {
     try {
-      const { title, description } = req?.body;
-      if (title && description) {
+      const { title, description, userId } = req?.body;
+      if (title && description && userId) {
         const newTask = new taskSchema({
           title,
           description,
+          userId,
         });
         const taskResponse = await newTask.save();
         if (taskResponse._id) {
@@ -34,7 +35,7 @@ const taskController = {
         .find({
           title: { $regex: req.query.item, $options: "i" },
           active: true,
-          userId: "66a10d52dccda4d28a9b5dfd",
+          userId: req.query.user,
         })
         .sort({ created_at: sortValue })
         .select("-__v");
